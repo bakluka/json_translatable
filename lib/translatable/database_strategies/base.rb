@@ -26,6 +26,10 @@ module Translatable
         raise NotImplementedError, "Subclasses must implement migration_example"
       end
 
+      def where_translations_scope(model_class, attributes, locales: [], case_sensitive: false)
+        raise NotImplementedError, "#{self.class.name} does not support where_translations yet"
+      end
+      
       def validate_index_recommendation(model_class, column_name)
         nil
       end

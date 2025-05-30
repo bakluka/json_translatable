@@ -123,6 +123,13 @@ module Translatable
         attribute resolved_column.to_sym, strategy.column_type, default: {}
       end
 
+      def where_translations(attributes, locales: [], case_sensitive: false)
+        return none if attributes.blank?
+        
+        strategy = database_strategy
+        strategy.where_translations_scope(self, attributes, locales: locales, case_sensitive: case_sensitive)
+      end
+
       def validates_translation(*fields, **options, &block)
         fields.flatten.each do |field|
           if !translatable_fields.include?(field.to_sym)

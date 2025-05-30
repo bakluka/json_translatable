@@ -13,15 +13,6 @@ module Translatable
         "add_column :#{table_name}, :#{column_name}, :json, null: false"
       end
 
-      def validate_index_recommendation(model_class, column_name)
-        return if @index_warning_issued
-
-        Rails.logger.warn "TRANSLATABLE INFO: Model #{model_class.name} is using MySQL with JSON column '#{column_name}'. " \
-                          "Consider adding functional indexes for frequently queried translation fields for better performance."
-        
-        @index_warning_issued = true
-      end
-
       def where_translations_scope(model_class, attributes, locales: [], case_sensitive: false)
         column_name = model_class.translations_column_name
         search_locales = locales.present? ? locales.map(&:to_s) : model_class.translatable_locales.map(&:to_s)

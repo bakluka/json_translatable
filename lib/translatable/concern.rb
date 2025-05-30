@@ -213,8 +213,6 @@ module Translatable
                 "Translatable fields should not exist as actual database columns." \
                 "\n\nConflicting columns: #{conflicting_columns.join(', ')}"
         end
-
-        strategy.validate_index_recommendation(self, column_name)
       end
     end
   end

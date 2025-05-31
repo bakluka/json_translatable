@@ -16,23 +16,7 @@ module Translatable
       validate :validate_translations_structure
       validate :validate_translation_fields
 
-      after_initialize -> { 
-        self.class.validate_translatable
-
-        column_name = self.class.translations_column_name.to_s
-        current_translations = send(column_name) || {}
-        
-        self.class.translatable_locales.map(&:to_s).uniq.each do |locale|
-          current_translations[locale] ||= {}
-          self.class.translatable_fields.map(&:to_s).uniq.each do |field|
-            unless current_translations[locale].key?(field)
-              current_translations[locale][field] = nil
-            end
-          end
-        end
-        
-        send("#{column_name}=", current_translations)
-      }
+      after_initialize :initialize_translations
 
       def translate(locale = I18n.locale)
         translation_class = self.class.translation_class
@@ -110,6 +94,24 @@ module Translatable
       end
     end
 
+    def initialize_translations
+      self.class.validate_translatable
+
+      column_name = self.class.translations_column_name.to_s
+      current_translations = send(column_name) || {}
+      
+      self.class.translatable_locales.map(&:to_s).uniq.each do |locale|
+        current_translations[locale] ||= {}
+        self.class.translatable_fields.map(&:to_s).uniq.each do |field|
+          unless current_translations[locale].key?(field)
+            current_translations[locale][field] = nil
+          end
+        end
+      end
+      
+      send("#{column_name}=", current_translations)
+    end
+
     class_methods do
       def translatable(*fields, locales: nil, column: nil)
         resolved_locales = locales || Translatable.configuration.default_locales.call
@@ -166,12 +168,9 @@ module Translatable
       end
 
       def translations_permit_list
-        column_name = translations_column_name.to_s
-        {
-          column_name => self.translatable_locales.map do |locale|
-            [locale.to_s, self.translatable_fields.map(&:to_s)]
-          end.to_h
-        }
+        self.translatable_locales.map do |locale|
+          [locale.to_s, self.translatable_fields.map(&:to_s)]
+        end.to_h
       end
 
       def database_strategy

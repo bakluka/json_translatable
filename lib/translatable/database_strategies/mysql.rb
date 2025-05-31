@@ -5,10 +5,6 @@ module Translatable
         :json
       end
 
-      def expected_column_type
-        :json
-      end
-
       def migration_example(table_name, column_name)
         "add_column :#{table_name}, :#{column_name}, :json, null: false"
       end

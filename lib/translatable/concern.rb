@@ -118,9 +118,6 @@ module Translatable
         self.translatable_fields = fields.map(&:to_sym)
         self.translatable_locales = resolved_locales.map(&:to_sym)
         self.translations_column_name = resolved_column.to_sym
-        
-        strategy = database_strategy
-        attribute resolved_column.to_sym, strategy.column_type, default: {}
       end
 
       def where_translations(attributes, locales: [], case_sensitive: false)
@@ -190,7 +187,7 @@ module Translatable
         strategy = database_strategy
         
         unless self.column_names.include?(column_name) && 
-               self.columns_hash[column_name]&.type == strategy.expected_column_type
+               self.columns_hash[column_name]&.type == strategy.column_type
           raise MissingTranslationsColumnError, 
                 "Model #{self.name} is missing a '#{column_name}' #{strategy.column_type} column. " \
                 "Please add it via a migration:\n#{strategy.migration_example(self.table_name, column_name)}"

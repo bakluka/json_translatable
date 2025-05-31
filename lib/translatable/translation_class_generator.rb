@@ -16,12 +16,7 @@ module Translatable
         end
         
         def method_missing(method_name, *args, &block)
-          method_str = method_name.to_s
-          
-          if method_str.end_with?('=')
-            key = method_str.chomp('=').to_sym
-            @attributes[key] = args.first
-          elsif @attributes.key?(method_name)
+          if @attributes.key?(method_name)
             @attributes[method_name]
           else
             super
@@ -29,8 +24,7 @@ module Translatable
         end
         
         def respond_to_missing?(method_name, include_private = false)
-          method_str = method_name.to_s
-          method_str.end_with?('=') || @attributes.key?(method_name) || super
+          @attributes.key?(method_name) || super
         end
         
         def [](key)
@@ -48,8 +42,9 @@ module Translatable
         def inspect
           fields = @attributes.reject { |k, _| k == :locale }
                               .map { |field, value| "#{field}: #{value.inspect.to_s[0, 30]}" }
-                              .join(", ")
-          "#<#{self.class.name} #{fields}>"
+                              .append("locale: #{@locale.inspect}")
+                              .join(', ')
+          "#<#{self.class} #{fields}>"
         end
         
         def to_s

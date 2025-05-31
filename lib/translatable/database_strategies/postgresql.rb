@@ -5,10 +5,6 @@ module Translatable
         :jsonb
       end
 
-      def expected_column_type
-        :jsonb
-      end
-
       def migration_example(table_name, column_name)
         "add_column :#{table_name}, :#{column_name}, :jsonb, default: {}, null: false"
       end

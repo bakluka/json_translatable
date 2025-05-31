@@ -18,10 +18,6 @@ module Translatable
         raise NotImplementedError, "Subclasses must implement column_type"
       end
 
-      def expected_column_type
-        raise NotImplementedError, "Subclasses must implement expected_column_type"
-      end
-
       def migration_example(table_name, column_name)
         raise NotImplementedError, "Subclasses must implement migration_example"
       end

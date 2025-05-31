@@ -275,6 +275,23 @@ article.translations = data
 article.save!
 ```
 
+#### Form example
+
+`translatable` concern adds `translatable_locales` and `translatable_fields` methods to the model class. You can use those methods to create a simple form for your translations, e.g.:
+
+```erb
+<%= form_for @article do |f| %>
+  <% Article.translatable_locales.each do |locale| %>
+    <%= f.fields_for "translations[#{locale}]", f.object.translate(locale) do |ff| %>
+      <% Article.translatable_fields.each do |field| %>
+        <%= ff.label field %>
+        <%= ff.text_field field %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+```
+
 ### 6. Strong Parameters
 
 In controllers, permit translated fields easily:
@@ -293,7 +310,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:user_id, :category_id, translations: Article.translations_permit_list)
+    params.require(:article).permit(:user_id, translations: Article.translations_permit_list)
   end
 end
 ```

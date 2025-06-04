@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/json_translatable.svg)](https://badge.fury.io/rb/json_translatable.svg)  
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A I18n Rails gem that allows storing and querying translations for ActiveRecord models in a single JSON/JSONB column.
+I18n Rails gem that allows storing and querying translations for ActiveRecord models in a single JSON/JSONB column.
 
 ---
 
@@ -34,7 +34,7 @@ A I18n Rails gem that allows storing and querying translations for ActiveRecord 
 
 ## Requirements
 
-- **Rails** >= 7.0
+- **ActiveRecord** >= 7.0
 - **PostgreSQL** >= 9.4 *or*
 - **MySQL** >= 5.7.9 *or*
 - **SQLite** >= 3.38.0 (>= 3.9.0 if compiled with SQLITE_ENABLE_JSON1 enabled)

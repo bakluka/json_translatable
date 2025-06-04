@@ -8,7 +8,6 @@ require_relative 'translatable/database_strategies/sqlite'
 require_relative 'translatable/translation_class_generator'
 require_relative 'translatable/concern'
 
-
 module Translatable
   extend ActiveSupport::Concern
   include Translatable::Concern
@@ -25,3 +24,5 @@ module Translatable
     yield(configuration)
   end
 end
+
+require 'translatable/railtie' if defined?(Rails)
